@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gerencie seu acervo pessoal de livros.">
+  <title>Biblioteca | Gerenciador de Livros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/api.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Biblioteca, página inicial">
+      <span class="brand-icon">B</span><span>Biblioteca<span class="brand-dot">.</span></span>
+    </a>
+    <span class="topbar-note">SEU ACERVO, ORGANIZADO</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ESPAÇO DE LEITURA</p>
+        <h1>Histórias que<br><em>moram na estante.</em></h1>
+        <p class="hero-copy">Organize seus livros, acompanhe sua jornada de leitura e descubra novas histórias.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="book book-one"></div><div class="book book-two"></div><div class="book book-three"></div>
+        <div class="plant">✳</div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Resumo do acervo">
+      <article class="stat-card"><span class="stat-label">TOTAL DE LIVROS</span><strong id="totalLivros">0</strong><span class="stat-caption">no seu acervo</span></article>
+      <article class="stat-card"><span class="stat-label">QUERO LER</span><strong id="totalQueroLer">0</strong><span class="stat-caption">na sua lista</span></article>
+      <article class="stat-card"><span class="stat-label">LENDO</span><strong id="totalLendo">0</strong><span class="stat-caption">em andamento</span></article>
+      <article class="stat-card"><span class="stat-label">CONCLUÍDOS</span><strong id="totalConcluidos">0</strong><span class="stat-caption">leituras finalizadas</span></article>
+    </section>
+
+    <section class="workspace">
+      <div class="section-heading">
+        <div><p class="eyebrow">GERENCIAMENTO</p><h2>Minha biblioteca</h2></div>
+        <button class="button button-primary" id="novoLivroBtn" type="button"><span>＋</span> Adicionar livro</button>
+      </div>
+
+      <section class="search-panel" aria-label="Pesquisar livros na Open Library">
+        <div class="search-copy"><strong>Encontrar um livro</strong><span>Pesquise na Open Library para preencher os dados automaticamente.</span></div>
+        <form id="formBuscaExterna" class="external-search">
+          <label class="sr-only" for="buscaExterna">Título do livro para pesquisar</label>
+          <input id="buscaExterna" type="search" placeholder="Ex.: Dom Casmurro" required>
+          <button class="button button-dark" type="submit">Pesquisar</button>
+        </form>
+      </section>
+      <div id="resultadosExternos" class="external-results" aria-live="polite"></div>
+
+      <div class="toolbar">
+        <div class="tabs" role="group" aria-label="Filtrar por status">
+          <button class="tab active" data-filtro="Todos" type="button">Todos</button>
+          <button class="tab" data-filtro="Quero ler" type="button">Quero ler</button>
+          <button class="tab" data-filtro="Lendo" type="button">Lendo</button>
+          <button class="tab" data-filtro="Concluído" type="button">Concluídos</button>
+        </div>
+        <label class="search-local"><span aria-hidden="true">⌕</span><input id="buscaLocal" type="search" placeholder="Buscar no meu acervo..." aria-label="Buscar livros cadastrados pelo título"></label>
+      </div>
+
+      <div id="mensagem" class="message" role="status" aria-live="polite"></div>
+      <div id="listaLivros" class="book-grid"></div>
+    </section>
+  </main>
+
+  <dialog id="dialogLivro" class="dialog">
+    <form id="formLivro" class="dialog-content">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">DETALHES DO ACERVO</p><h2 id="tituloDialog">Adicionar livro</h2></div>
+        <button type="button" class="close-button" id="fecharDialog" aria-label="Fechar">×</button>
+      </div>
+      <input type="hidden" id="livroId">
+      <input type="hidden" id="capa">
+      <div class="form-grid">
+        <div class="field full"><label for="titulo">Título *</label><input id="titulo" name="titulo" maxlength="180" required></div>
+        <div class="field"><label for="autor">Autor *</label><input id="autor" name="autor" maxlength="120" required></div>
+        <div class="field"><label for="isbn">ISBN</label><input id="isbn" name="isbn" maxlength="20" placeholder="978..."></div>
+        <div class="field"><label for="ano">Ano de publicação *</label><input id="ano" name="ano" type="number" min="1" max="2100" required></div>
+        <div class="field"><label for="genero">Gênero literário *</label><input id="genero" name="genero" maxlength="80" placeholder="Ex.: Romance" required></div>
+        <div class="field full"><label for="status">Status de leitura *</label><select id="status" name="status" required><option value="Quero ler">Quero ler</option><option value="Lendo">Lendo</option><option value="Concluído">Concluído</option></select></div>
+      </div>
+      <p class="form-hint">* Campos obrigatórios</p>
+      <div class="dialog-actions"><button type="button" class="button button-light" id="cancelarDialog">Cancelar</button><button type="submit" class="button button-primary" id="salvarBtn">Salvar livro</button></div>
+    </form>
+  </dialog>
+
+  <footer><span>Biblioteca<span class="brand-dot">.</span></span><span>Feito para organizar boas histórias.</span></footer>
+</body>
+</html>
